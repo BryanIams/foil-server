@@ -1,0 +1,2 @@
+# Preserves .sh file line endings = lf
+*.sh text eol=lf
