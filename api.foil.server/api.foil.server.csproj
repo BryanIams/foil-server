@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>Api.Foil.Server</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,11 +10,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
+    <PackageReference Include="Serilog" Version="2.5.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Logentries" Version="3.0.26" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="3.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\domain.foil.server\domain.foil.server.csproj" />
+    <ProjectReference Include="..\utility.foil.server\utility.foil.server.csproj" />
   </ItemGroup>
 
 </Project>

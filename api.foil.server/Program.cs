@@ -1,25 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 
-namespace api.foil.server
+namespace Api.Foil.Server
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            BuildWebHost(args).Run();
-        }
+	public class Program
+	{
+		public static IWebHost BuildWebHost(string[] args) =>
+			WebHost.CreateDefaultBuilder(args)
+				.UseStartup<Startup>()
+				.UseSerilog()
+				.Build();
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
-    }
+		public static void Main(string[] args)
+		{
+			Log.Logger = new LoggerConfiguration()
+				.MinimumLevel.Debug()
+				.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+				.Enrich.FromLogContext()
+				.WriteTo.Console()
+				.WriteTo.Seq("http://localhost:5341/")
+				.CreateLogger();
+
+			BuildWebHost(args).Run();
+		}
+	}
 }
