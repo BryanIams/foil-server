@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Humanizer;
+using Newtonsoft.Json;
 
 namespace Data.Foil.Server.Repositories
 {
@@ -24,9 +25,7 @@ namespace Data.Foil.Server.Repositories
 
 		public async Task<T> Get(string id)
 		{
-			var document = await _cosmosDbConnection.Client.ReadDocumentAsync(UriFactory.CreateDocumentUri(_cosmosDbConnection.DatabaseId, _collectionId, id));
-
-			return (T) (dynamic) document;
+			return await _cosmosDbConnection.Client.ReadDocumentAsync<T>(UriFactory.CreateDocumentUri(_cosmosDbConnection.DatabaseId, _collectionId, id));
 		}
 
 		public async Task<IEnumerable<T>> GetItems(Expression<Func<T, bool>> predicate)

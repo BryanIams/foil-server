@@ -16,10 +16,16 @@ namespace Api.Foil.Server.Controllers
 			_cardsProcessor = cardsProcessor;
 		}
 
-		[HttpGet("{cardNumber}")]
+		[HttpGet("{id}")]
+		public async Task<Card> Get(string id)
+		{
+			return await _cardsProcessor.GetCardById(id);
+		}
+
+		[HttpGet("number/{cardNumber}")]
 		public async Task<Card> Get(int cardNumber)
 		{
-			return await _cardsProcessor.GetCard(cardNumber);
+			return await _cardsProcessor.GetCardByNumber(cardNumber);
 		}
 	}
 }
