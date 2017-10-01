@@ -4,8 +4,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Foil.Server.Models.Cards;
+using Data.Foil.Server.Models.Decks;
 using Humanizer;
 using Microsoft.Azure.Documents;
+using Newtonsoft.Json;
 using utility.foil.server.ApplicationConfiguration.Options;
 
 namespace Data.Foil.Server.Seeds
@@ -21,11 +23,12 @@ namespace Data.Foil.Server.Seeds
 
 		public async Task Seed()
 		{
-			var client = new DocumentClient(new Uri(_cosmosDb.EndpointUrl), _cosmosDb.PrimaryKey, new ConnectionPolicy { EnableEndpointDiscovery = false });
+			var client = new DocumentClient(new Uri(_cosmosDb.EndpointUrl), _cosmosDb.PrimaryKey, new JsonSerializerSettings{ TypeNameHandling = TypeNameHandling.All }, new ConnectionPolicy { EnableEndpointDiscovery = false } );
 
 			await CreateDatabaseIfNotExists(client);
 
 			await SeedCards(client);
+			await SeedDecks(client);
 		}
 
 		private async Task SeedCards(IDocumentClient client)
@@ -35,6 +38,15 @@ namespace Data.Foil.Server.Seeds
 			await CreateCollection(client, collectionId);
 
 			await Seeds.SeedCards.Seed(client, _cosmosDb.DatabaseId, collectionId);
+		}
+
+		private async Task SeedDecks(IDocumentClient client)
+		{
+			var collectionId = typeof(Deck).Name.Pluralize();
+
+			await CreateCollection(client, collectionId);
+
+			await Seeds.SeedDecks.Seed(client, _cosmosDb.DatabaseId, collectionId);
 		}
 
 		private async Task CreateDatabaseIfNotExists(IDocumentClient client)

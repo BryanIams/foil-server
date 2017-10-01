@@ -10,6 +10,7 @@ namespace Api.Foil.Server.ApplicationConfiguration
 		{
 			services.AddScoped<CardsProcessor>();
 			services.AddScoped<SeedsProcessor>();
+			services.AddScoped<DecksProcessor>();
 
 			ServicesConfiguration.Configure(services);
 		}
