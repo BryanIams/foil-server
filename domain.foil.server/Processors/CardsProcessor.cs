@@ -1,4 +1,5 @@
-﻿using Data.Foil.Server.Repositories;
+﻿using System.Collections.Generic;
+using Data.Foil.Server.Repositories;
 using Domain.Foil.Server.DomainTransferObjects.Cards;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,25 @@ namespace Domain.Foil.Server.Processors
 		{
 			_cardRepository = cardRepository;
 			_cdn = cdnOptions.Value;
+		}
+
+		public async Task<IEnumerable<Card>> GetCards()
+		{
+			var cards = (await _cardRepository.GetItems(x => true)).ToList();
+
+
+			if (cards.Count > 0)
+			{
+				return cards.Select(x => new Card
+				{
+					Title = x.Title,
+					Number = x.Number,
+					Description = x.Description,
+					Url = $"{_cdn.Url}/{x.Url}"
+				});
+			}
+
+			return new List<Card>();
 		}
 
 		public async Task<Card> GetCardById(string id)

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Domain.Foil.Server.DomainTransferObjects.Cards;
 using Domain.Foil.Server.Processors;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,12 @@ namespace Api.Foil.Server.Controllers
 		public CardsController(CardsProcessor cardsProcessor)
 		{
 			_cardsProcessor = cardsProcessor;
+		}
+
+		[HttpGet]
+		public async Task<IEnumerable<Card>> Get()
+		{
+			return await _cardsProcessor.GetCards();
 		}
 
 		[HttpGet("{id}")]
